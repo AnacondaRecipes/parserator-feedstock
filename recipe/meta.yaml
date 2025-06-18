@@ -1,0 +1,59 @@
+{% set name = "parserator" %}
+{% set version = "0.6.9" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/parserator-{{ version }}.tar.gz
+  sha256: f7dfd2d41588aaafa485da6f7f1107ac8e5997f0cabed9a65e1302bfa7af480a
+
+build:
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  number: 0
+  skip: True  # [py<37]
+  entry_points:
+    - parserator = parserator.main:dispatch
+
+requirements:
+  host:
+    - python
+    - setuptools >=42
+    - wheel
+    - pip
+  run:
+    - python
+    - lxml >=3.7.3
+    - python-crfsuite >=0.7
+    - chardet
+
+test:
+  source_files:
+    - tests/test_xml.py
+  imports:
+    - parserator
+  commands:
+    - pip check
+    - parserator --help
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - python -m unittest -v tests/test_xml.py
+  requires:
+    - pip
+    - pytest
+
+about:
+  home: https://github.com/datamade/parserator
+  license: MIT
+  license_family: MIT
+  license_file: LICENSE
+  summary: A toolkit for making domain-specific probabilistic parsers
+  description: |
+    Parserator is a toolkit for making domain-specific probabilistic parsers, built on python-crfsuite.
+    To create a parser, all you need is some training data to teach your parser about its domain.
+  doc_url: https://parserator.readthedocs.io
+  dev_url: https://github.com/datamade/parserator
+
+extra:
+  recipe-maintainers:
+    - PatrykKups
