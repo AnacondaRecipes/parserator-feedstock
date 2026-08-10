@@ -2,16 +2,16 @@
 {% set version = "0.6.9" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/parserator-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: f7dfd2d41588aaafa485da6f7f1107ac8e5997f0cabed9a65e1302bfa7af480a
 
 build:
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  number: 0
+  number: 1
   skip: True  # [py<37]
   entry_points:
     - parserator = parserator.main:dispatch
